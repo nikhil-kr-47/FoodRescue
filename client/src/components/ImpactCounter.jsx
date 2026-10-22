@@ -26,7 +26,6 @@ export default function ImpactCounter({ setActiveTab }) {
 
   useEffect(() => {
     fetchImpact();
-    // 5-second polling for live updates
     const interval = setInterval(fetchImpact, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -43,29 +42,28 @@ export default function ImpactCounter({ setActiveTab }) {
   };
 
   return (
-    <div className="space-y-8 py-6">
+    <div className="space-y-6 sm:space-y-8 py-4 sm:py-6">
       {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-emerald-700 to-teal-800 rounded-2xl p-8 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-r from-emerald-700 via-emerald-800 to-teal-800 rounded-2xl p-5 sm:p-8 text-white shadow-md relative overflow-hidden">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/30 text-emerald-100 mb-3 border border-emerald-400/30">
+          <div className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/30 text-emerald-100 mb-3 border border-emerald-400/30">
             🌱 SDG 12.3 & SDG 2 (Zero Hunger) Prototype
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl mb-3">
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2.5 leading-tight">
             Rescue Surplus Food in Real-Time
           </h1>
-          <p className="text-emerald-100 text-sm leading-relaxed mb-6">
-            A fast, rule-based redistribution prototype connecting canteens, restaurants, and caterers
-            with local NGOs and volunteers before safe consumption limits expire.
+          <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed mb-5 sm:mb-6">
+            A fast, rule-based redistribution platform connecting food businesses with local NGOs and volunteers before safe consumption limits expire.
           </p>
 
-          {/* Quick CTA buttons */}
-          <div className="flex flex-wrap gap-3">
+          {/* Quick CTA buttons - Responsive Stack */}
+          <div className="flex flex-col sm:flex-row gap-2.5">
             <button
               onClick={() => {
                 if (!user) handleSeedLogin('Donor');
                 else setActiveTab('donor');
               }}
-              className="px-4 py-2 bg-white text-emerald-800 rounded-lg font-semibold text-sm shadow hover:bg-emerald-50 transition"
+              className="w-full sm:w-auto px-4 py-2.5 bg-white text-emerald-800 rounded-lg font-bold text-xs sm:text-sm shadow hover:bg-emerald-50 transition text-center"
             >
               Post Surplus Food (Donor)
             </button>
@@ -74,7 +72,7 @@ export default function ImpactCounter({ setActiveTab }) {
                 if (!user) handleSeedLogin('NGO');
                 else setActiveTab('ngo');
               }}
-              className="px-4 py-2 bg-emerald-900/60 text-white border border-emerald-400/40 rounded-lg font-semibold text-sm hover:bg-emerald-900 transition"
+              className="w-full sm:w-auto px-4 py-2.5 bg-emerald-900/60 text-white border border-emerald-400/40 rounded-lg font-bold text-xs sm:text-sm hover:bg-emerald-900 transition text-center"
             >
               Review Matching (NGO)
             </button>
@@ -83,7 +81,7 @@ export default function ImpactCounter({ setActiveTab }) {
                 if (!user) handleSeedLogin('Volunteer');
                 else setActiveTab('volunteer');
               }}
-              className="px-4 py-2 bg-emerald-900/60 text-white border border-emerald-400/40 rounded-lg font-semibold text-sm hover:bg-emerald-900 transition"
+              className="w-full sm:w-auto px-4 py-2.5 bg-emerald-900/60 text-white border border-emerald-400/40 rounded-lg font-bold text-xs sm:text-sm hover:bg-emerald-900 transition text-center"
             >
               Volunteer Dispatch
             </button>
@@ -92,81 +90,81 @@ export default function ImpactCounter({ setActiveTab }) {
       </div>
 
       {/* Requirement 6: Tiny Impact Counter */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-4">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2">
             <span>📊 Live Redistribution Impact</span>
           </h2>
-          <span className="text-xs text-slate-500 flex items-center gap-1.5">
+          <span className="text-[11px] text-slate-500 flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Auto-polling every 5s
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {/* Main Key Metric */}
-          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center">
-            <div className="text-3xl font-black text-emerald-700">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          {/* Main Metric */}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 sm:p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-black text-emerald-700">
               {loading ? '...' : impact.totalMealsDelivered}
             </div>
-            <div className="text-xs font-semibold text-emerald-900 mt-1 uppercase tracking-wide">
+            <div className="text-[10px] sm:text-xs font-bold text-emerald-900 mt-1 uppercase tracking-wide">
               Total Meals Delivered
             </div>
-            <div className="text-[11px] text-emerald-600 mt-0.5">Verified food rescued</div>
+            <div className="text-[10px] text-emerald-600 mt-0.5 hidden xs:block">Verified food rescued</div>
           </div>
 
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
-            <div className="text-3xl font-black text-amber-700">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 sm:p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-black text-amber-700">
               {loading ? '...' : impact.openListings}
             </div>
-            <div className="text-xs font-semibold text-amber-900 mt-1 uppercase tracking-wide">
+            <div className="text-[10px] sm:text-xs font-bold text-amber-900 mt-1 uppercase tracking-wide">
               Open Listings
             </div>
-            <div className="text-[11px] text-amber-600 mt-0.5">Ready for NGO matching</div>
+            <div className="text-[10px] text-amber-600 mt-0.5 hidden xs:block">Ready for NGO match</div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-            <div className="text-3xl font-black text-blue-700">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-black text-blue-700">
               {loading ? '...' : impact.activeRedistributions}
             </div>
-            <div className="text-xs font-semibold text-blue-900 mt-1 uppercase tracking-wide">
+            <div className="text-[10px] sm:text-xs font-bold text-blue-900 mt-1 uppercase tracking-wide">
               Active Transfers
             </div>
-            <div className="text-[11px] text-blue-600 mt-0.5">Accepted / In Transit</div>
+            <div className="text-[10px] text-blue-600 mt-0.5 hidden xs:block">In Transit</div>
           </div>
 
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-            <div className="text-3xl font-black text-purple-700">
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 sm:p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-black text-purple-700">
               {loading ? '...' : impact.deliveredCount}
             </div>
-            <div className="text-xs font-semibold text-purple-900 mt-1 uppercase tracking-wide">
+            <div className="text-[10px] sm:text-xs font-bold text-purple-900 mt-1 uppercase tracking-wide">
               Completed Drives
             </div>
-            <div className="text-[11px] text-purple-600 mt-0.5">Successfully served</div>
+            <div className="text-[10px] text-purple-600 mt-0.5 hidden xs:block">Successfully served</div>
           </div>
         </div>
       </div>
 
       {/* Safety Table Reference Info */}
-      <div className="bg-slate-100 rounded-xl p-5 border border-slate-200">
-        <h3 className="text-sm font-bold text-slate-800 mb-2">
+      <div className="bg-slate-100 rounded-xl p-4 sm:p-5 border border-slate-200">
+        <h3 className="text-xs sm:text-sm font-bold text-slate-800 mb-2.5">
           ⏱ Food Safety Window Reference (Hardcoded Rule Table)
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="bg-white p-3 rounded border border-slate-200">
-            <div className="font-semibold text-slate-900">🍛 Cooked rice, curries, dal</div>
-            <div className="text-emerald-700 font-bold mt-1">4 Hours Safe Window</div>
-            <div className="text-slate-500 text-[11px]">Immediate consumption needed</div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 text-xs">
+          <div className="bg-white p-3 rounded-lg border border-slate-200">
+            <div className="font-bold text-slate-900">🍛 Cooked rice, curries, dal</div>
+            <div className="text-emerald-700 font-bold mt-1 text-xs">4 Hours Safe Window</div>
+            <div className="text-slate-500 text-[10px] sm:text-[11px]">Immediate consumption needed</div>
           </div>
-          <div className="bg-white p-3 rounded border border-slate-200">
-            <div className="font-semibold text-slate-900">🍞 Bakery items</div>
-            <div className="text-emerald-700 font-bold mt-1">12 Hours Safe Window</div>
-            <div className="text-slate-500 text-[11px]">Breads, buns, dry pastries</div>
+          <div className="bg-white p-3 rounded-lg border border-slate-200">
+            <div className="font-bold text-slate-900">🍞 Bakery items</div>
+            <div className="text-emerald-700 font-bold mt-1 text-xs">12 Hours Safe Window</div>
+            <div className="text-slate-500 text-[10px] sm:text-[11px]">Breads, buns, dry pastries</div>
           </div>
-          <div className="bg-white p-3 rounded border border-slate-200">
-            <div className="font-semibold text-slate-900">📦 Sealed packaged food</div>
-            <div className="text-emerald-700 font-bold mt-1">48 Hours Safe Window</div>
-            <div className="text-slate-500 text-[11px]">Factory sealed pantry items</div>
+          <div className="bg-white p-3 rounded-lg border border-slate-200">
+            <div className="font-bold text-slate-900">📦 Sealed packaged food</div>
+            <div className="text-emerald-700 font-bold mt-1 text-xs">48 Hours Safe Window</div>
+            <div className="text-slate-500 text-[10px] sm:text-[11px]">Factory sealed items</div>
           </div>
         </div>
       </div>
