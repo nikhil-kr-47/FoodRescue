@@ -1,6 +1,25 @@
-// Simple API helper with token management
-// In production, fallback to VITE_API_BASE_URL (e.g. https://your-backend.onrender.com/api) or default to '/api'
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
+// Simple API helper with token and backend URL management
+
+export const getApiBase = () => {
+  const saved = localStorage.getItem('foodrescue_backend_url');
+  if (saved) return saved.replace(/\/$/, '');
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  if (envUrl) return envUrl.replace(/\/$/, '');
+  return '/api';
+};
+
+export const setCustomApiBase = (url) => {
+  if (!url) {
+    localStorage.removeItem('foodrescue_backend_url');
+  } else {
+    // ensure /api suffix if not already present
+    let clean = url.trim().replace(/\/$/, '');
+    if (!clean.endsWith('/api') && !clean.includes('/api/')) {
+      clean += '/api';
+    }
+    localStorage.setItem('foodrescue_backend_url', clean);
+  }
+};
 
 export const getToken = () => localStorage.getItem('foodrescue_token');
 export const setToken = (token) => localStorage.setItem('foodrescue_token', token);
@@ -22,12 +41,23 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(`${API_BASE}${endpoint}`, options);
-  const data = await response.json();
+  const apiBase = getApiBase();
 
-  if (!response.ok) {
-    throw new Error(data.error || 'Something went wrong');
+  try {
+    const response = await fetch(`${apiBase}${endpoint}`, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Request failed');
+    }
+
+    return data;
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message.includes('fetch')) {
+      throw new Error(
+        `Failed to reach backend at "${apiBase}". If you haven't connected your Render URL, please set your backend URL in the top navbar ⚙️ settings.`
+      );
+    }
+    throw err;
   }
-
-  return data;
 }
