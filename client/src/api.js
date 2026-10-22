@@ -1,10 +1,21 @@
-// Simple API helper with token and backend URL management
+// API helper with direct connection to your live Render backend
+const PRODUCTION_BACKEND_URL = 'https://foodrescue-1z0t.onrender.com/api';
 
 export const getApiBase = () => {
+  // 1. Saved custom URL in localStorage (if any)
   const saved = localStorage.getItem('foodrescue_backend_url');
   if (saved) return saved.replace(/\/$/, '');
+
+  // 2. Environment variable if set in Vercel
   const envUrl = import.meta.env.VITE_API_BASE_URL;
   if (envUrl) return envUrl.replace(/\/$/, '');
+
+  // 3. If running on Vercel or production, directly use your live Render backend!
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return PRODUCTION_BACKEND_URL;
+  }
+
+  // 4. Localhost fallback
   return '/api';
 };
 
@@ -12,7 +23,6 @@ export const setCustomApiBase = (url) => {
   if (!url) {
     localStorage.removeItem('foodrescue_backend_url');
   } else {
-    // ensure /api suffix if not already present
     let clean = url.trim().replace(/\/$/, '');
     if (!clean.endsWith('/api') && !clean.includes('/api/')) {
       clean += '/api';
@@ -43,21 +53,12 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
 
   const apiBase = getApiBase();
 
-  try {
-    const response = await fetch(`${apiBase}${endpoint}`, options);
-    const data = await response.json();
+  const response = await fetch(`${apiBase}${endpoint}`, options);
+  const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Request failed');
-    }
-
-    return data;
-  } catch (err) {
-    if (err.name === 'TypeError' && err.message.includes('fetch')) {
-      throw new Error(
-        `Failed to reach backend at "${apiBase}". If you haven't connected your Render URL, please set your backend URL in the top navbar ⚙️ settings.`
-      );
-    }
-    throw err;
+  if (!response.ok) {
+    throw new Error(data.error || 'Request failed');
   }
+
+  return data;
 }

@@ -26,6 +26,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'FoodRescue Prototype API', timestamp: new Date() });
 });
 
+// Explicit remote seed endpoint
+app.get('/api/seed', async (req, res) => {
+  try {
+    const seedData = require('./seed');
+    await seedData(false);
+    res.json({ message: 'Database successfully seeded with 3 users and 3 listings!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Seed failed: ' + err.message });
+  }
+});
+
 // Connect to MongoDB and start server
 mongoose
   .connect(MONGO_URI)
